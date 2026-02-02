@@ -1,63 +1,59 @@
-//
-//  main.c
-//  simple linkedlist
-//
-//  Created by Mingmanas Sivaraksa on 4/2/2566 BE.
-//
-
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "node.h"
 
-int main(int argc, const char * argv[]) {
-    int c=5;
-    struct node a,b,*head ;
-    a.value = c;
-    a.next=&b;
-    head=&a;
-    b.value=head->value+3;
+typedef struct node* NodePtr;
 
-    printf("%d\n", head ->value ); //what value for 5
-    printf("%d\n", head ->next->value ); //what value for 8
-/*  Exercise I
-    1. Add 1 more than at the end
-    2. Add value(11)
-    3. Make next become NULL
- */
-    
-/*  Exercise II
-        1. Add 1 more than at the begining!!!!
-        2. Add value (2)
-        
-*/
-    typedef struct node* NodePtr;
-    NodePtr tmp=head; //add temp value to faciliate
-        
-    /*  Exercise III Use loop to print everything
-        int i,n=5;
-        for(i=0;i<n;i++){
-            printf("%3d", tmp->value);
-          // What is missing???
-        }
-    */
-    
-   /*  Exercise IV change to while loop!! (you can use NULL to help)
-       
-         while(){
-            printf("%3d", tmp->value);
-           // What is missing???
-        }
-    */
-    
- /*  Exercise V Use malloc to create all nodes, instead of create a struct!!
-         //use a loop to help
-          
-     */
+/* insert node at end */
+void insert(NodePtr *head, int id, char *name) {
+    NodePtr newNode = (NodePtr)malloc(sizeof(struct node));
+    newNode->id = id;
+    strcpy(newNode->name, name);
+    newNode->next = NULL;
 
-    /*  Exercise VI Free all node !!
-         //use a loop to help
-          
-     */
-    
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+
+    NodePtr temp = *head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+}
+
+/* print all nodes */
+void printList(struct node *head) {
+    while (head != NULL) {
+        printf("%d %s\n", head->id, head->name);
+        head = head->next;
+    }
+}
+
+/* free all nodes */
+void freeList(NodePtr head) {
+    NodePtr temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+}
+
+int main(int argc, char *argv[]) {
+    NodePtr head = NULL;
+
+    /* insert from command-line arguments */
+    for (int i = 1; i < argc; i += 2) {
+        int id = atoi(argv[i]);
+        char *name = argv[i + 1];
+        insert(&head, id, name);
+    }
+
+    printList(head);
+    freeList(head);
+
     return 0;
 }
