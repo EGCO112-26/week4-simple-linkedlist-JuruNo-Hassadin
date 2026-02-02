@@ -1,4 +1,4 @@
-compile: main.c 
+compile: Assignment4.c 
 	 gcc main.c -o ming
 
 run: ming
