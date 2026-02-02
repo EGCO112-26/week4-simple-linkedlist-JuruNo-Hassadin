@@ -1,75 +1,59 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "node.h"
 
-typedef struct Student {
-    int id;
-    char name[50];
-    struct Student *next;
-}Student;
+typedef struct node* NodePtr;
 
-/* สร้าง node ใหม่ */
-Student* create_node(int id, char *name) {
-    Student *new_node = (Student *)malloc(sizeof(Student));
-    if (new_node == NULL) {
-        return NULL;
-    }
-    new_node->id = id;
-    strcpy(new_node->name, name);
-    new_node->next = NULL;
-    return new_node;
-}
+/* insert node at end */
+void insert(NodePtr *head, int id, char *name) {
+    NodePtr newNode = (NodePtr)malloc(sizeof(struct node));
+    newNode->id = id;
+    strcpy(newNode->name, name);
+    newNode->next = NULL;
 
-/* เพิ่ม node ต่อท้าย list */
-void insert_node(Student **head, int id, char *name) {
-    Student *new_node = create_node(id, name);
     if (*head == NULL) {
-        *head = new_node;
+        *head = newNode;
         return;
     }
 
-    Student *temp = *head;
+    NodePtr temp = *head;
     while (temp->next != NULL) {
         temp = temp->next;
     }
-    temp->next = new_node;
+    temp->next = newNode;
 }
 
-/* แสดงข้อมูลทั้งหมด */
-void print_list(Student *head) {
-    Student *temp = head;
-    while (temp != NULL) {
-        printf("%d %s\n", temp->id, temp->name);
-        temp = temp->next;
+/* print all nodes */
+void printList(NodePtr head) {
+    while (head != NULL) {
+        printf("%d %s\n", head->id, head->name);
+        head = head->next;
     }
 }
 
-/* ลบ linked list ทั้งหมด */
-void free_list(Student *head) {
-    Student *temp;
+/* free all nodes */
+void freeList(NodePtr head) {
+    NodePtr temp;
     while (head != NULL) {
-        temp = head->next;
-        free(head);
-        head = temp;
+        temp = head;
+        head = head->next;
+        free(temp);
     }
 }
 
 int main(int argc, char *argv[]) {
-    Student *head = NULL;
+    NodePtr head = NULL;
 
-    /* รับ input จาก command line */
+    /* insert from command-line arguments */
     for (int i = 1; i < argc; i += 2) {
         int id = atoi(argv[i]);
         char *name = argv[i + 1];
-        insert_node(&head, id, name);
+        insert(&head, id, name);
     }
 
-    /* แสดงผล */
-    print_list(head);
-
-    /* ลบ list */
-    free_list(head);
-    head = NULL;
+    printList(head);
+    freeList(head);
 
     return 0;
 }

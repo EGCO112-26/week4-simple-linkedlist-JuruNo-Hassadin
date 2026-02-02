@@ -116,10 +116,10 @@ int main(int argc, const char * argv[]) {
         /* print using iterator so we don't lose `head` */
         NodePtr it = head;
         while(it){
+        
             printf("%3d\n", it->value);
             it=it->next;
         }
-        
         
         
         
