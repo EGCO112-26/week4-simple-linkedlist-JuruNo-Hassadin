@@ -10,7 +10,8 @@
 
 struct node
 {
-    int value;
+    int id;
+    char name[50];
     struct node *next;
 };
 
